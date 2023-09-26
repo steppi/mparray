@@ -65,9 +65,50 @@ def betaln(x, y):
     return mp.log(mp.beta(x, y))
 
 
+def _betainc_scalar(a, b, x):
+    if x < 0 or x > 1:
+        # The mpmath betainc implementation is defined for x in the complex plane,
+        # but we want to restrict to the domain [0, 1] used in scipy.special.
+        return mp.nan
+    return mp.betainc(a, b, 0, x, regularized=True)
+
+
 @vectorize
 def betainc(a, b, x):
-    return mp.betainc(a, b, 0, x, regularized=True)
+    return _betainc_scalar(a, b, x)
+
+
+@vectorize
+def betaincc(a, b, x):
+    if x < a / (a + b):
+        return mp.one - _betainc_scalar(a, b, x)
+    else:
+        return _betainc_scalar(a, b, mp.one - x)
+
+
+def _betaincinv_scalar(a, b, x):
+    # We catch input which would lead to issues in the root finder.
+    if x < 0 or x > 1:
+        return mp.nan
+
+    if x == 0 or x == 1:
+        return x
+
+    def f(y):
+        return _betainc_scalar(a, b, y) - x
+
+    res = mp.findroot(f, (0, 1), solver="bisect", verify=False)
+    return res
+
+
+@vectorize
+def betaincinv(a, b, x):
+    return _betaincinv_scalar(a, b, x)
+
+
+@vectorize
+def betainccinv(a, b, x):
+    return _betaincinv_scalar(a, b, mp.one - x)
 
 
 @vectorize
@@ -94,6 +135,7 @@ def xlog1py(x, y):  # needs accuracy review
 def cosm1(x):
     # second term in cosine series is x**2/2
     extra_dps = 2*int(mp.ceil(-mp.log10(x))) + 1
+    print(extra_dps)
     mp.dps += extra_dps
     res = mp.cos(x) - mp.one
     mp.dps -= extra_dps
