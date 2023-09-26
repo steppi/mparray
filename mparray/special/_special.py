@@ -28,6 +28,8 @@ hyp1f1 = vectorize(mp.hyp1f1)
 hyp2f1 = vectorize(mp.hyp2f1)
 iv = vectorize(mp.besseli)
 kv = vectorize(mp.besselk)
+# SciPy uses normalized sinc function, called sincpi in mpmath.
+sinc = vectorize(mp.sincpi)
 
 
 @vectorize
