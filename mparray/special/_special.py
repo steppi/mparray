@@ -133,9 +133,10 @@ def xlog1py(x, y):  # needs accuracy review
 
 @vectorize
 def cosm1(x):
-    # second term in cosine series is x**2/2
-    extra_dps = 2*int(mp.ceil(-mp.log10(x))) + 1
-    print(extra_dps)
+    # Find closest multiple of 2pi to x.
+    c = mp.mpf(round(x / (2 * mp.pi)) * mp.pi)
+    # Near x = 2*n*pi, cos(x) goes as 1 - (x - 2*n*pi)**2 / 2 + o(x**2).
+    extra_dps = max(2*int(mp.ceil(-mp.log10(x - c))) + mp.one, mp.zero)
     mp.dps += extra_dps
     res = mp.cos(x) - mp.one
     mp.dps -= extra_dps
