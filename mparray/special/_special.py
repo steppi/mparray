@@ -34,6 +34,8 @@ j0 = vectorize(mp.j0)
 j1 = vectorize(mp.j1)
 hankel1 = vectorize(mp.hankel1)
 hankel2 = vectorize(mp.hankel2)
+struve = vectorize(mp.struveh)
+modstruve = vectorize(mp.struvel)
 
 
 @vectorize
