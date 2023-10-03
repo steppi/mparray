@@ -32,6 +32,8 @@ sinc = vectorize(mp.sincpi)
 polygamma = vectorize(mp.psi)
 j0 = vectorize(mp.j0)
 j1 = vectorize(mp.j1)
+hankel1 = vectorize(mp.hankel1)
+hankel2 = vectorize(mp.hankel2)
 
 
 @vectorize
@@ -137,6 +139,43 @@ def expn(n, x):
     return mp.expint(n, x)
 
 
+@vectorize
+def jv(v, z):
+    return mp.besselj(v, z)
+
+
+@vectorize
+def jve(v, z):
+    return asarray(jv(v, z) * exp(-abs(z.imag)))
+
+
+@vectorize
+def y0(x):
+    return mp.bessely(0, x)
+
+
+@vectorize
+def y1(x):
+    return mp.bessely(1, x)
+
+
+@vectorize
+def yv(v, z):
+    return mp.bessely(v, z)
+
+
+def yve(v, z):
+    return asarray(yv(v, z) * exp(-abs(z.imag)))
+
+
+def hankel1e(v, z):
+    return asarray(hankel1(v, z) * exp(-1j * z))
+
+
+def hankel2e(v, z):
+    return asarray(hankel2(v, z) * exp(1j * z))
+
+
 def _boxcox_scalar(x, lmbda):
     """
     y = (x**lmbda - 1) / lmbda  if lmbda != 0
@@ -193,6 +232,14 @@ def k0e(x):
 
 def k1e(x):
     return asarray(kve(1, x))
+
+
+def k0(x):
+    return asarray(kv(0, x))
+
+
+def k1(x):
+    return asarray(kv(1, x))
 
 
 def chdtr(v, x):
