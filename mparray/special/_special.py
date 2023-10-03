@@ -38,6 +38,13 @@ hankel1 = vectorize(mp.hankel1)
 hankel2 = vectorize(mp.hankel2)
 struve = vectorize(mp.struveh)
 modstruve = vectorize(mp.struvel)
+sph_harm = vectorize(mp.spherharm)
+eval_chebyt = vectorize(mp.chebyt)
+eval_chebyu = vectorize(mp.chebyu)
+eval_jacobi = vectorize(mp.jacobi)
+eval_gegenbauer = vectorize(mp.gegenbauer)
+eval_hermite = vectorize(mp.hermite)
+eval_laguerre = vectorize(mp.laguerre)
 
 
 @vectorize
@@ -258,6 +265,11 @@ def stdtr(df, t):
     x = df / (t**2 + df)
     p = betainc(df/2, mp.one/2, x)/2
     return np.where(t < 0, p, mp.one - p)
+
+
+@vectorize
+def lpmv(m, v, x):
+    return mp.legenp(n, m, z)
 
 
 # others to be added
