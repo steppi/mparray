@@ -28,6 +28,10 @@ hyp1f1 = vectorize(mp.hyp1f1)
 hyp2f1 = vectorize(mp.hyp2f1)
 iv = vectorize(mp.besseli)
 kv = vectorize(mp.besselk)
+sinc = vectorize(mp.sincpi)
+polygamma = vectorize(mp.psi)
+j0 = vectorize(mp.j0)
+j1 = vectorize(mp.j1)
 
 
 @vectorize
@@ -116,6 +120,21 @@ def logit(x):  # needs accuracy review
 @vectorize
 def expit(x):  # needs accuracy review
     return mp.exp(x - mp.log1p(mp.exp(x)))
+
+
+@vectorize
+def exp1(z):
+    return mp.e1(z)
+
+
+@vectorize
+def expi(x):
+    return mp.ei(x)
+
+
+@vectorize
+def expn(n, x):
+    return mp.expint(n, x)
 
 
 def _boxcox_scalar(x, lmbda):
